@@ -1,0 +1,1232 @@
+Function: 
+import ai.abstraction.AbstractAction;
+import ai.abstraction.Harvest;
+import ai.abstraction.pathfinding.PathFinding;
+import rts.GameState;
+import rts.PlayerAction;
+import rts.ResourceUsage;
+import rts.units.Unit;
+import rts.units.UnitTypeTable;
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class HarvestResources {
+
+    public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+        PlayerAction pa = (currentPlayerAction == null) ? new PlayerAction() : currentPlayerAction.clone();
+        HashSet<Unit> processedUnits = new HashSet<>();
+        
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() != player) continue;
+            if (!u.getType().isWorker()) continue;
+            if (processedUnits.contains(u)) continue;
+            
+            Unit targetResource = findNearestResource(game, u);
+            if (targetResource == null) continue;
+            
+            Harvest harvestAction = new Harvest();
+            harvestAction.unit = u;
+            harvestAction.target = targetResource;
+            harvestAction.base = findBase(game, u, player);
+            harvestAction.pf = pf;
+            
+            ResourceUsage ru = currentPlayerAction != null ? currentPlayerAction.getResourceUsage() : new ResourceUsage();
+            UnitAction ua = harvestAction.execute(game, ru);
+            
+            if (ua != null) {
+                pa.addUnitAction(u, ua);
+                processedUnits.add(u);
+            }
+        }
+        
+        return pa;
+    }
+    
+    private Unit findNearestResource(GameState game, Unit u) {
+        int[][] dirs = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+        for (int[] dir : dirs) {
+            int nx = u.getX() + dir[0];
+            int ny = u.getY() + dir[1];
+            Unit resource = game.getUnitAtPosition(nx, ny);
+            if (resource != null && resource.getType().isResource()) {
+                return resource;
+            }
+        }
+        return null;
+    }
+    
+    private Unit findBase(GameState game, Unit u, int player) {
+        // Logic to find the nearest base for the worker
+        // Implementation details depend on game specifics
+        return null; // Replace with actual base finding logic
+    }
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:22: error: illegal start of type
+import ai.abstraction.AbstractAction;
+^
+src/tests/HarvestActionTest.java:22: error: <identifier> expected
+import ai.abstraction.AbstractAction;
+                                    ^
+src/tests/HarvestActionTest.java:23: error: illegal start of type
+import ai.abstraction.Harvest;
+^
+src/tests/HarvestActionTest.java:23: error: <identifier> expected
+import ai.abstraction.Harvest;
+                             ^
+src/tests/HarvestActionTest.java:24: error: illegal start of type
+import ai.abstraction.pathfinding.PathFinding;
+^
+src/tests/HarvestActionTest.java:24: error: <identifier> expected
+import ai.abstraction.pathfinding.PathFinding;
+                                             ^
+src/tests/HarvestActionTest.java:25: error: illegal start of type
+import rts.GameState;
+^
+src/tests/HarvestActionTest.java:25: error: <identifier> expected
+import rts.GameState;
+                    ^
+src/tests/HarvestActionTest.java:26: error: illegal start of type
+import rts.PlayerAction;
+^
+src/tests/HarvestActionTest.java:26: error: <identifier> expected
+import rts.PlayerAction;
+                       ^
+src/tests/HarvestActionTest.java:27: error: illegal start of type
+import rts.ResourceUsage;
+^
+src/tests/HarvestActionTest.java:27: error: <identifier> expected
+import rts.ResourceUsage;
+                        ^
+src/tests/HarvestActionTest.java:28: error: illegal start of type
+import rts.units.Unit;
+^
+src/tests/HarvestActionTest.java:28: error: <identifier> expected
+import rts.units.Unit;
+                     ^
+src/tests/HarvestActionTest.java:29: error: illegal start of type
+import rts.units.UnitTypeTable;
+^
+src/tests/HarvestActionTest.java:29: error: <identifier> expected
+import rts.units.UnitTypeTable;
+                              ^
+src/tests/HarvestActionTest.java:30: error: illegal start of type
+import java.util.HashMap;
+^
+src/tests/HarvestActionTest.java:30: error: <identifier> expected
+import java.util.HashMap;
+                        ^
+src/tests/HarvestActionTest.java:31: error: illegal start of type
+import java.util.HashSet;
+^
+src/tests/HarvestActionTest.java:31: error: <identifier> expected
+import java.util.HashSet;
+                        ^
+20 errors
+Function: 
+import ai.abstraction.AbstractAction;
+import ai.abstraction.Harvest;
+import ai.abstraction.pathfinding.PathFinding;
+import rts.GameState;
+import rts.PlayerAction;
+import rts.ResourceUsage;
+import rts.units.Unit;
+import rts.units.UnitTypeTable;
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class HarvestResources {
+
+    public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+        PlayerAction pa = (currentPlayerAction == null) ? new PlayerAction() : currentPlayerAction.clone();
+        HashSet<Unit> processedUnits = new HashSet<>();
+        
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() != player) continue;
+            if (!u.getType().isWorker()) continue;
+            if (processedUnits.contains(u)) continue;
+            
+            Unit targetResource = findNearestResource(game, u);
+            if (targetResource == null) continue;
+            
+            Harvest harvestAction = new Harvest();
+            harvestAction.unit = u;
+            harvestAction.target = targetResource;
+            harvestAction.base = findBase(game, u, player);
+            harvestAction.pf = pf;
+            
+            ResourceUsage ru = currentPlayerAction != null ? currentPlayerAction.getResourceUsage() : new ResourceUsage();
+            UnitAction ua = harvestAction.execute(game, ru);
+            
+            if (ua != null) {
+                pa.addUnitAction(u, ua);
+                processedUnits.add(u);
+            }
+        }
+        
+        return pa;
+    }
+    
+    private Unit findNearestResource(GameState game, Unit u) {
+        int[][] dirs = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+        for (int[] dir : dirs) {
+            int nx = u.getX() + dir[0];
+            int ny = u.getY() + dir[1];
+            Unit resource = game.getUnitAtPosition(nx, ny);
+            if (resource != null && resource.getType().isResource()) {
+                return resource;
+            }
+        }
+        return null;
+    }
+    
+    private Unit findBase(GameState game, Unit u, int player) {
+        // Logic to find the nearest base for the worker
+        // Implementation details depend on game specifics
+        return null; // Replace with actual base finding logic
+    }
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:22: error: illegal start of type
+import ai.abstraction.AbstractAction;
+^
+src/tests/HarvestActionTest.java:22: error: <identifier> expected
+import ai.abstraction.AbstractAction;
+                                    ^
+src/tests/HarvestActionTest.java:23: error: illegal start of type
+import ai.abstraction.Harvest;
+^
+src/tests/HarvestActionTest.java:23: error: <identifier> expected
+import ai.abstraction.Harvest;
+                             ^
+src/tests/HarvestActionTest.java:24: error: illegal start of type
+import ai.abstraction.pathfinding.PathFinding;
+^
+src/tests/HarvestActionTest.java:24: error: <identifier> expected
+import ai.abstraction.pathfinding.PathFinding;
+                                             ^
+src/tests/HarvestActionTest.java:25: error: illegal start of type
+import rts.GameState;
+^
+src/tests/HarvestActionTest.java:25: error: <identifier> expected
+import rts.GameState;
+                    ^
+src/tests/HarvestActionTest.java:26: error: illegal start of type
+import rts.PlayerAction;
+^
+src/tests/HarvestActionTest.java:26: error: <identifier> expected
+import rts.PlayerAction;
+                       ^
+src/tests/HarvestActionTest.java:27: error: illegal start of type
+import rts.ResourceUsage;
+^
+src/tests/HarvestActionTest.java:27: error: <identifier> expected
+import rts.ResourceUsage;
+                        ^
+src/tests/HarvestActionTest.java:28: error: illegal start of type
+import rts.units.Unit;
+^
+src/tests/HarvestActionTest.java:28: error: <identifier> expected
+import rts.units.Unit;
+                     ^
+src/tests/HarvestActionTest.java:29: error: illegal start of type
+import rts.units.UnitTypeTable;
+^
+src/tests/HarvestActionTest.java:29: error: <identifier> expected
+import rts.units.UnitTypeTable;
+                              ^
+src/tests/HarvestActionTest.java:30: error: illegal start of type
+import java.util.HashMap;
+^
+src/tests/HarvestActionTest.java:30: error: <identifier> expected
+import java.util.HashMap;
+                        ^
+src/tests/HarvestActionTest.java:31: error: illegal start of type
+import java.util.HashSet;
+^
+src/tests/HarvestActionTest.java:31: error: <identifier> expected
+import java.util.HashSet;
+                        ^
+20 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction newAction = new PlayerAction();
+    List<Unit> playerUnits = game.getUnits().stream()
+        .filter(u -> u.getPlayer() == player)
+        .toList();
+
+    for (Unit unit : playerUnits) {
+        UnitAction currentAction = game.getUnitAction(unit);
+        if (currentAction != null && currentAction.getType() == UnitAction.TYPE_HARVEST) {
+            continue;
+        }
+
+        List<Unit> resources = game.getPhysicalGameState().getResources();
+        for (Unit resource : resources) {
+            if (resource.getPlayer() == -1 && resource.getType().getHarvestAmount() > 0) {
+                int[] dir = new int[]{DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT};
+                for (int d : dir) {
+                    int targetX = resource.getX() + DIRECTION_OFFSET_X[d];
+                    int targetY = resource.getY() + DIRECTION_OFFSET_Y[d];
+                    if (game.free(targetX, targetY)) {
+                        Harvest harvestAction = new Harvest();
+                        harvestAction.unit = unit;
+                        harvestAction.target = resource;
+                        harvestAction.base = unit;
+                        harvestAction.pf = pf;
+                        
+                        if (pf.pathExists(unit, resource.getPosition(), game, new ResourceUsage())) {
+                            newAction.addUnitAction(unit, harvestAction.execute(game, new ResourceUsage()));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return newAction;
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:34: error: cannot find symbol
+        List<Unit> resources = game.getPhysicalGameState().getResources();
+                                                          ^
+  symbol:   method getResources()
+  location: class PhysicalGameState
+src/tests/HarvestActionTest.java:36: error: cannot find symbol
+            if (resource.getPlayer() == -1 && resource.getType().getHarvestAmount() > 0) {
+                                                                ^
+  symbol:   method getHarvestAmount()
+  location: class UnitType
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                int[] dir = new int[]{DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT};
+                                      ^
+  symbol:   variable DIRECTION_UP
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                int[] dir = new int[]{DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT};
+                                                    ^
+  symbol:   variable DIRECTION_RIGHT
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                int[] dir = new int[]{DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT};
+                                                                     ^
+  symbol:   variable DIRECTION_DOWN
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                int[] dir = new int[]{DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT};
+                                                                                     ^
+  symbol:   variable DIRECTION_LEFT
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:39: error: cannot find symbol
+                    int targetX = resource.getX() + DIRECTION_OFFSET_X[d];
+                                                    ^
+  symbol:   variable DIRECTION_OFFSET_X
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:40: error: cannot find symbol
+                    int targetY = resource.getY() + DIRECTION_OFFSET_Y[d];
+                                                    ^
+  symbol:   variable DIRECTION_OFFSET_Y
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:42: error: constructor Harvest in class Harvest cannot be applied to given types;
+                        Harvest harvestAction = new Harvest();
+                                                ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:43: error: unit is not public in AbstractAction; cannot be accessed from outside package
+                        harvestAction.unit = unit;
+                                     ^
+src/tests/HarvestActionTest.java:44: error: target is not public in Harvest; cannot be accessed from outside package
+                        harvestAction.target = resource;
+                                     ^
+src/tests/HarvestActionTest.java:45: error: base is not public in Harvest; cannot be accessed from outside package
+                        harvestAction.base = unit;
+                                     ^
+src/tests/HarvestActionTest.java:46: error: pf is not public in Harvest; cannot be accessed from outside package
+                        harvestAction.pf = pf;
+                                     ^
+src/tests/HarvestActionTest.java:48: error: method getPosition in class Unit cannot be applied to given types;
+                        if (pf.pathExists(unit, resource.getPosition(), game, new ResourceUsage())) {
+                                                        ^
+  required: PhysicalGameState
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+14 errors
+Function: 
+import ai.abstraction.Harvest;
+import ai.abstraction.pathfinding.PathFinding;
+import rts.GameState;
+import rts.PlayerAction;
+import rts.ResourceUsage;
+import rts.units.Unit;
+import rts.units.UnitTypeTable;
+import java.util.*;
+
+public class HarvestResourcesFunction {
+    public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+        PlayerAction newPA = new PlayerAction();
+        Set<Long> assignedResources = new HashSet<>();
+
+        // Find all workers of the player
+        List<Unit> workers = new ArrayList<>();
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() == player && u.getType().isWorker()) {
+                workers.add(u);
+            }
+        }
+
+        // Find all resource units
+        List<Unit> resources = new ArrayList<>();
+        for (Unit u : game.getUnits()) {
+            if (u.getType().isResource()) {
+                resources.add(u);
+            }
+        }
+
+        // Find the base (home base) of the player
+        Unit base = null;
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() == player && u.getType().isBase()) {
+                base = u;
+                break;
+            }
+        }
+        if (base == null) {
+            return newPA; // No base, can't harvest
+        }
+
+        // Assign each worker to the nearest resource
+        for (Unit worker : workers) {
+            Unit target = null;
+            double minDistance = Double.MAX_VALUE;
+            for (Unit res : resources) {
+                if (!assignedResources.contains(res.getID())) {
+                    int dx = Math.abs(worker.getX() - res.getX());
+                    int dy = Math.abs(worker.getY() - res.getY());
+                    double distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        target = res;
+                    }
+                }
+            }
+            if (target != null) {
+                // Create Harvest action
+                Harvest harvestAction = new Harvest();
+                harvestAction.unit = worker;
+                harvestAction.target = target;
+                harvestAction.base = base;
+                harvestAction.pf = pf;
+
+                // Get ResourceUsage from current action or create new
+                ResourceUsage ru = (currentPlayerAction != null) ? currentPlayerAction.getResourceUsage() : new ResourceUsage();
+
+                // Execute the action to get the UnitAction
+                UnitAction ua = harvestAction.execute(game, ru);
+
+                // Add the action to the new PlayerAction
+                newPA.addUnitAction(worker, ua);
+                assignedResources.add(target.getID());
+            }
+        }
+
+        return newPA;
+    }
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:22: error: illegal start of type
+import ai.abstraction.Harvest;
+^
+src/tests/HarvestActionTest.java:22: error: <identifier> expected
+import ai.abstraction.Harvest;
+                             ^
+src/tests/HarvestActionTest.java:23: error: illegal start of type
+import ai.abstraction.pathfinding.PathFinding;
+^
+src/tests/HarvestActionTest.java:23: error: <identifier> expected
+import ai.abstraction.pathfinding.PathFinding;
+                                             ^
+src/tests/HarvestActionTest.java:24: error: illegal start of type
+import rts.GameState;
+^
+src/tests/HarvestActionTest.java:24: error: <identifier> expected
+import rts.GameState;
+                    ^
+src/tests/HarvestActionTest.java:25: error: illegal start of type
+import rts.PlayerAction;
+^
+src/tests/HarvestActionTest.java:25: error: <identifier> expected
+import rts.PlayerAction;
+                       ^
+src/tests/HarvestActionTest.java:26: error: illegal start of type
+import rts.ResourceUsage;
+^
+src/tests/HarvestActionTest.java:26: error: <identifier> expected
+import rts.ResourceUsage;
+                        ^
+src/tests/HarvestActionTest.java:27: error: illegal start of type
+import rts.units.Unit;
+^
+src/tests/HarvestActionTest.java:27: error: <identifier> expected
+import rts.units.Unit;
+                     ^
+src/tests/HarvestActionTest.java:28: error: illegal start of type
+import rts.units.UnitTypeTable;
+^
+src/tests/HarvestActionTest.java:28: error: <identifier> expected
+import rts.units.UnitTypeTable;
+                              ^
+src/tests/HarvestActionTest.java:29: error: illegal start of type
+import java.util.*;
+^
+src/tests/HarvestActionTest.java:29: error: <identifier> expected
+import java.util.*;
+                 ^
+16 errors
+Function: 
+import ai.abstraction.Harvest;
+import ai.abstraction.pathfinding.PathFinding;
+import rts.GameState;
+import rts.PlayerAction;
+import rts.ResourceUsage;
+import rts.units.Unit;
+import rts.units.UnitTypeTable;
+import java.util.*;
+
+public class HarvestResourcesFunction {
+    public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+        PlayerAction newPA = new PlayerAction();
+        Set<Long> assignedResources = new HashSet<>();
+
+        // Find all workers of the player
+        List<Unit> workers = new ArrayList<>();
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() == player && u.getType().isWorker()) {
+                workers.add(u);
+            }
+        }
+
+        // Find all resource units
+        List<Unit> resources = new ArrayList<>();
+        for (Unit u : game.getUnits()) {
+            if (u.getType().isResource()) {
+                resources.add(u);
+            }
+        }
+
+        // Find the base (home base) of the player
+        Unit base = null;
+        for (Unit u : game.getUnits()) {
+            if (u.getPlayer() == player && u.getType().isBase()) {
+                base = u;
+                break;
+            }
+        }
+        if (base == null) {
+            return newPA; // No base, can't harvest
+        }
+
+        // Assign each worker to the nearest resource
+        for (Unit worker : workers) {
+            Unit target = null;
+            double minDistance = Double.MAX_VALUE;
+            for (Unit res : resources) {
+                if (!assignedResources.contains(res.getID())) {
+                    int dx = Math.abs(worker.getX() - res.getX());
+                    int dy = Math.abs(worker.getY() - res.getY());
+                    double distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        target = res;
+                    }
+                }
+            }
+            if (target != null) {
+                // Create Harvest action
+                Harvest harvestAction = new Harvest();
+                harvestAction.unit = worker;
+                harvestAction.target = target;
+                harvestAction.base = base;
+                harvestAction.pf = pf;
+
+                // Get ResourceUsage from current action or create new
+                ResourceUsage ru = (currentPlayerAction != null) ? currentPlayerAction.getResourceUsage() : new ResourceUsage();
+
+                // Execute the action to get the UnitAction
+                UnitAction ua = harvestAction.execute(game, ru);
+
+                // Add the action to the new PlayerAction
+                newPA.addUnitAction(worker, ua);
+                assignedResources.add(target.getID());
+            }
+        }
+
+        return newPA;
+    }
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:22: error: illegal start of type
+import ai.abstraction.Harvest;
+^
+src/tests/HarvestActionTest.java:22: error: <identifier> expected
+import ai.abstraction.Harvest;
+                             ^
+src/tests/HarvestActionTest.java:23: error: illegal start of type
+import ai.abstraction.pathfinding.PathFinding;
+^
+src/tests/HarvestActionTest.java:23: error: <identifier> expected
+import ai.abstraction.pathfinding.PathFinding;
+                                             ^
+src/tests/HarvestActionTest.java:24: error: illegal start of type
+import rts.GameState;
+^
+src/tests/HarvestActionTest.java:24: error: <identifier> expected
+import rts.GameState;
+                    ^
+src/tests/HarvestActionTest.java:25: error: illegal start of type
+import rts.PlayerAction;
+^
+src/tests/HarvestActionTest.java:25: error: <identifier> expected
+import rts.PlayerAction;
+                       ^
+src/tests/HarvestActionTest.java:26: error: illegal start of type
+import rts.ResourceUsage;
+^
+src/tests/HarvestActionTest.java:26: error: <identifier> expected
+import rts.ResourceUsage;
+                        ^
+src/tests/HarvestActionTest.java:27: error: illegal start of type
+import rts.units.Unit;
+^
+src/tests/HarvestActionTest.java:27: error: <identifier> expected
+import rts.units.Unit;
+                     ^
+src/tests/HarvestActionTest.java:28: error: illegal start of type
+import rts.units.UnitTypeTable;
+^
+src/tests/HarvestActionTest.java:28: error: <identifier> expected
+import rts.units.UnitTypeTable;
+                              ^
+src/tests/HarvestActionTest.java:29: error: illegal start of type
+import java.util.*;
+^
+src/tests/HarvestActionTest.java:29: error: <identifier> expected
+import java.util.*;
+                 ^
+16 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction pa = new PlayerAction();
+    List<Unit> units = game.getUnits();
+    for (Unit u : units) {
+        if (u.getPlayer() == player) {
+            if (u.getType().getHarvestAmount() > 0) {
+                if (u.isIdle(game)) {
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dy = -1; dy <= 1; dy++) {
+                            if (dx == 0 && dy == 0) continue;
+                            int targetX = u.getX() + dx;
+                            int targetY = u.getY() + dy;
+                            if (game.getPhysicalGameState().isValidPosition(targetX, targetY)) {
+                                Unit targetUnit = game.getPhysicalGameState().getUnitAt(targetX, targetY);
+                                if (targetUnit != null && targetUnit.getType().getHarvestAmount() > 0) {
+                                    if (pf.pathExists(u, targetX * game.getPhysicalGameState().getWidth() + targetY, game, game.getResourceUsage())) {
+                                        Harvest harvestAction = new Harvest();
+                                        harvestAction.setUnit(u);
+                                        harvestAction.setTarget(targetUnit);
+                                        harvestAction.setBase(u);
+                                        harvestAction.execute(game, game.getResourceUsage());
+                                        pa.addUnitAction(u, harvestAction.getUnitAction());
+                                        break;
+                                    }
+                                } else if (game.getPhysicalGameState().getResourcesAt(targetX, targetY) > 0) {
+                                    if (pf.pathExists(u, targetX * game.getPhysicalGameState().getWidth() + targetY, game, game.getResourceUsage())) {
+                                        Harvest harvestAction = new Harvest();
+                                        harvestAction.setUnit(u);
+                                        harvestAction.setTarget(null);
+                                        harvestAction.setBase(u);
+                                        harvestAction.execute(game, game.getResourceUsage());
+                                        pa.addUnitAction(u, harvestAction.getUnitAction());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return pa;
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:27: error: cannot find symbol
+            if (u.getType().getHarvestAmount() > 0) {
+                           ^
+  symbol:   method getHarvestAmount()
+  location: class UnitType
+src/tests/HarvestActionTest.java:34: error: cannot find symbol
+                            if (game.getPhysicalGameState().isValidPosition(targetX, targetY)) {
+                                                           ^
+  symbol:   method isValidPosition(int,int)
+  location: class PhysicalGameState
+src/tests/HarvestActionTest.java:36: error: cannot find symbol
+                                if (targetUnit != null && targetUnit.getType().getHarvestAmount() > 0) {
+                                                                              ^
+  symbol:   method getHarvestAmount()
+  location: class UnitType
+src/tests/HarvestActionTest.java:38: error: constructor Harvest in class Harvest cannot be applied to given types;
+                                        Harvest harvestAction = new Harvest();
+                                                                ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:40: error: cannot find symbol
+                                        harvestAction.setTarget(targetUnit);
+                                                     ^
+  symbol:   method setTarget(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:41: error: cannot find symbol
+                                        harvestAction.setBase(u);
+                                                     ^
+  symbol:   method setBase(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:43: error: cannot find symbol
+                                        pa.addUnitAction(u, harvestAction.getUnitAction());
+                                                                         ^
+  symbol:   method getUnitAction()
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:46: error: cannot find symbol
+                                } else if (game.getPhysicalGameState().getResourcesAt(targetX, targetY) > 0) {
+                                                                      ^
+  symbol:   method getResourcesAt(int,int)
+  location: class PhysicalGameState
+src/tests/HarvestActionTest.java:48: error: constructor Harvest in class Harvest cannot be applied to given types;
+                                        Harvest harvestAction = new Harvest();
+                                                                ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:50: error: cannot find symbol
+                                        harvestAction.setTarget(null);
+                                                     ^
+  symbol:   method setTarget(<null>)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:51: error: cannot find symbol
+                                        harvestAction.setBase(u);
+                                                     ^
+  symbol:   method setBase(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:53: error: cannot find symbol
+                                        pa.addUnitAction(u, harvestAction.getUnitAction());
+                                                                         ^
+  symbol:   method getUnitAction()
+  location: variable harvestAction of type Harvest
+12 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction newPlayerAction = new PlayerAction();
+    List<Unit> playerUnits = game.getUnits().stream()
+        .filter(unit -> unit.getPlayer() == player)
+        .collect(Collectors.toList());
+
+    for (Unit unit : playerUnits) {
+        if (unit.getType().getHarvestAmount() > 0) { // Check if unit is a harvester
+            Unit targetResource = findNearestResource(game, unit);
+            if (targetResource != null) {
+                Unit base = findNearestBase(game, player, unit);
+                if (base != null) {
+                    Harvest harvestAction = new Harvest();
+                    harvestAction.setUnit(unit);
+                    harvestAction.setTarget(targetResource);
+                    harvestAction.setBase(base);
+                    harvestAction.setPathFinding(pf);
+
+                    UnitAction unitAction = harvestAction.execute(game);
+                    if (unitAction != null) {
+                        newPlayerAction.addUnitAction(unit, unitAction);
+                    }
+                }
+            }
+        }
+    }
+    return newPlayerAction;
+}
+
+private Unit findNearestResource(GameState game, Unit unit) {
+    List<Unit> resources = game.getUnits().stream()
+        .filter(u -> u.getType().isResource())
+        .collect(Collectors.toList());
+    
+    return resources.stream()
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+        .orElse(null);
+}
+
+private Unit findNearestBase(GameState game, int player, Unit unit) {
+    List<Unit> bases = game.getUnits().stream()
+        .filter(u -> u.getPlayer() == player && u.getType().isBase())
+        .collect(Collectors.toList());
+    
+    return bases.stream()
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+        .orElse(null);
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:26: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:29: error: cannot find symbol
+        if (unit.getType().getHarvestAmount() > 0) { // Check if unit is a harvester
+                          ^
+  symbol:   method getHarvestAmount()
+  location: class UnitType
+src/tests/HarvestActionTest.java:34: error: constructor Harvest in class Harvest cannot be applied to given types;
+                    Harvest harvestAction = new Harvest();
+                                            ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:36: error: cannot find symbol
+                    harvestAction.setTarget(targetResource);
+                                 ^
+  symbol:   method setTarget(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                    harvestAction.setBase(base);
+                                 ^
+  symbol:   method setBase(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:38: error: cannot find symbol
+                    harvestAction.setPathFinding(pf);
+                                 ^
+  symbol:   method setPathFinding(PathFinding)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:53: error: cannot find symbol
+        .filter(u -> u.getType().isResource())
+                                ^
+  symbol:   method isResource()
+  location: class UnitType
+src/tests/HarvestActionTest.java:54: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:57: error: cannot find symbol
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+             ^
+  symbol:   variable Comparator
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:63: error: cannot find symbol
+        .filter(u -> u.getPlayer() == player && u.getType().isBase())
+                                                           ^
+  symbol:   method isBase()
+  location: class UnitType
+src/tests/HarvestActionTest.java:64: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:67: error: cannot find symbol
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+             ^
+  symbol:   variable Comparator
+  location: class HarvestActionTest
+12 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction newPlayerAction = new PlayerAction();
+    List<Unit> playerUnits = game.getUnits().stream()
+        .filter(unit -> unit.getPlayer() == player)
+        .collect(Collectors.toList());
+
+    for (Unit unit : playerUnits) {
+        if (unit.getType().getHarvestAmount() > 0) { // Check if unit is a harvester
+            Unit targetResource = findNearestResource(game, unit);
+            if (targetResource != null) {
+                Unit base = findNearestBase(game, player, unit);
+                if (base != null) {
+                    Harvest harvestAction = new Harvest();
+                    harvestAction.setUnit(unit);
+                    harvestAction.setTarget(targetResource);
+                    harvestAction.setBase(base);
+                    harvestAction.setPathFinding(pf);
+
+                    UnitAction unitAction = harvestAction.execute(game);
+                    if (unitAction != null) {
+                        newPlayerAction.addUnitAction(unit, unitAction);
+                    }
+                }
+            }
+        }
+    }
+    return newPlayerAction;
+}
+
+private Unit findNearestResource(GameState game, Unit unit) {
+    List<Unit> resources = game.getUnits().stream()
+        .filter(u -> u.getType().isResource())
+        .collect(Collectors.toList());
+    
+    return resources.stream()
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+        .orElse(null);
+}
+
+private Unit findNearestBase(GameState game, int player, Unit unit) {
+    List<Unit> bases = game.getUnits().stream()
+        .filter(u -> u.getPlayer() == player && u.getType().isBase())
+        .collect(Collectors.toList());
+    
+    return bases.stream()
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+        .orElse(null);
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:26: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:29: error: cannot find symbol
+        if (unit.getType().getHarvestAmount() > 0) { // Check if unit is a harvester
+                          ^
+  symbol:   method getHarvestAmount()
+  location: class UnitType
+src/tests/HarvestActionTest.java:34: error: constructor Harvest in class Harvest cannot be applied to given types;
+                    Harvest harvestAction = new Harvest();
+                                            ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:36: error: cannot find symbol
+                    harvestAction.setTarget(targetResource);
+                                 ^
+  symbol:   method setTarget(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:37: error: cannot find symbol
+                    harvestAction.setBase(base);
+                                 ^
+  symbol:   method setBase(Unit)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:38: error: cannot find symbol
+                    harvestAction.setPathFinding(pf);
+                                 ^
+  symbol:   method setPathFinding(PathFinding)
+  location: variable harvestAction of type Harvest
+src/tests/HarvestActionTest.java:53: error: cannot find symbol
+        .filter(u -> u.getType().isResource())
+                                ^
+  symbol:   method isResource()
+  location: class UnitType
+src/tests/HarvestActionTest.java:54: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:57: error: cannot find symbol
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+             ^
+  symbol:   variable Comparator
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:63: error: cannot find symbol
+        .filter(u -> u.getPlayer() == player && u.getType().isBase())
+                                                           ^
+  symbol:   method isBase()
+  location: class UnitType
+src/tests/HarvestActionTest.java:64: error: cannot find symbol
+        .collect(Collectors.toList());
+                 ^
+  symbol:   variable Collectors
+  location: class HarvestActionTest
+src/tests/HarvestActionTest.java:67: error: cannot find symbol
+        .min(Comparator.comparingInt(u -> Math.abs(u.getX() - unit.getX()) + Math.abs(u.getY() - unit.getY())))
+             ^
+  symbol:   variable Comparator
+  location: class HarvestActionTest
+12 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction result = new PlayerAction();
+    List<Unit> units = game.getUnits();
+    
+    for (Unit u : units) {
+        if (u.getPlayer() != player) continue;
+        if (game.getUnitAction(u) != null) continue;
+        if (!u.isIdle(game)) continue;
+        
+        Unit target = findNearestResource(game, u, a_utt);
+        Unit base = findNearestBase(game, u, a_utt);
+        
+        if (target != null && base != null) {
+            Harvest harvestAction = new Harvest();
+            harvestAction.target = target;
+            harvestAction.base = base;
+            harvestAction.pf = pf;
+            
+            UnitAction action = harvestAction.execute(game);
+            if (action != null && action.getType() == UnitAction.TYPE_HARVEST) {
+                result.addUnitAction(u, action);
+            }
+        }
+    }
+    
+    return result;
+}
+
+private Unit findNearestResource(GameState game, Unit u, UnitTypeTable utt) {
+    List<Unit> resources = game.getUnits().stream()
+        .filter(unit -> unit.getType().isResource())
+        .sorted((a, b) -> Integer.compare(getDistance(u, a), getDistance(u, b)))
+        .toList();
+    
+    return resources.isEmpty() ? null : resources.get(0);
+}
+
+private Unit findNearestBase(GameState game, Unit u, UnitTypeTable utt) {
+    List<Unit> bases = game.getUnits().stream()
+        .filter(unit -> unit.getType().isBase())
+        .sorted((a, b) -> Integer.compare(getDistance(u, a), getDistance(u, b)))
+        .toList();
+    
+    return bases.isEmpty() ? null : bases.get(0);
+}
+
+private int getDistance(Unit a, Unit b) {
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:35: error: constructor Harvest in class Harvest cannot be applied to given types;
+            Harvest harvestAction = new Harvest();
+                                    ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:36: error: target is not public in Harvest; cannot be accessed from outside package
+            harvestAction.target = target;
+                         ^
+src/tests/HarvestActionTest.java:37: error: base is not public in Harvest; cannot be accessed from outside package
+            harvestAction.base = base;
+                         ^
+src/tests/HarvestActionTest.java:38: error: pf is not public in Harvest; cannot be accessed from outside package
+            harvestAction.pf = pf;
+                         ^
+src/tests/HarvestActionTest.java:52: error: cannot find symbol
+        .filter(unit -> unit.getType().isResource())
+                                      ^
+  symbol:   method isResource()
+  location: class UnitType
+src/tests/HarvestActionTest.java:61: error: cannot find symbol
+        .filter(unit -> unit.getType().isBase())
+                                      ^
+  symbol:   method isBase()
+  location: class UnitType
+src/tests/HarvestActionTest.java:69: error: x is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                     ^
+src/tests/HarvestActionTest.java:69: error: x is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                           ^
+src/tests/HarvestActionTest.java:69: error: y is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                                           ^
+src/tests/HarvestActionTest.java:69: error: y is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                                                 ^
+10 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction result = new PlayerAction();
+    List<Unit> units = game.getUnits();
+    
+    for (Unit u : units) {
+        if (u.getPlayer() != player) continue;
+        if (game.getUnitAction(u) != null) continue;
+        if (!u.isIdle(game)) continue;
+        
+        Unit target = findNearestResource(game, u, a_utt);
+        Unit base = findNearestBase(game, u, a_utt);
+        
+        if (target != null && base != null) {
+            Harvest harvestAction = new Harvest();
+            harvestAction.target = target;
+            harvestAction.base = base;
+            harvestAction.pf = pf;
+            
+            UnitAction action = harvestAction.execute(game);
+            if (action != null && action.getType() == UnitAction.TYPE_HARVEST) {
+                result.addUnitAction(u, action);
+            }
+        }
+    }
+    
+    return result;
+}
+
+private Unit findNearestResource(GameState game, Unit u, UnitTypeTable utt) {
+    List<Unit> resources = game.getUnits().stream()
+        .filter(unit -> unit.getType().isResource())
+        .sorted((a, b) -> Integer.compare(getDistance(u, a), getDistance(u, b)))
+        .toList();
+    
+    return resources.isEmpty() ? null : resources.get(0);
+}
+
+private Unit findNearestBase(GameState game, Unit u, UnitTypeTable utt) {
+    List<Unit> bases = game.getUnits().stream()
+        .filter(unit -> unit.getType().isBase())
+        .sorted((a, b) -> Integer.compare(getDistance(u, a), getDistance(u, b)))
+        .toList();
+    
+    return bases.isEmpty() ? null : bases.get(0);
+}
+
+private int getDistance(Unit a, Unit b) {
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:35: error: constructor Harvest in class Harvest cannot be applied to given types;
+            Harvest harvestAction = new Harvest();
+                                    ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:36: error: target is not public in Harvest; cannot be accessed from outside package
+            harvestAction.target = target;
+                         ^
+src/tests/HarvestActionTest.java:37: error: base is not public in Harvest; cannot be accessed from outside package
+            harvestAction.base = base;
+                         ^
+src/tests/HarvestActionTest.java:38: error: pf is not public in Harvest; cannot be accessed from outside package
+            harvestAction.pf = pf;
+                         ^
+src/tests/HarvestActionTest.java:52: error: cannot find symbol
+        .filter(unit -> unit.getType().isResource())
+                                      ^
+  symbol:   method isResource()
+  location: class UnitType
+src/tests/HarvestActionTest.java:61: error: cannot find symbol
+        .filter(unit -> unit.getType().isBase())
+                                      ^
+  symbol:   method isBase()
+  location: class UnitType
+src/tests/HarvestActionTest.java:69: error: x is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                     ^
+src/tests/HarvestActionTest.java:69: error: x is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                           ^
+src/tests/HarvestActionTest.java:69: error: y is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                                           ^
+src/tests/HarvestActionTest.java:69: error: y is not public in Unit; cannot be accessed from outside package
+    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                                                 ^
+10 errors
+Function: 
+public PlayerAction Harvest_Resources(GameState game, int player, PlayerAction currentPlayerAction, PathFinding pf, UnitTypeTable a_utt, HashMap<Long, String> counterByFunction) {
+    PlayerAction pa = new PlayerAction();
+    List<Unit> units = game.getUnits();
+    
+    for (Unit u : units) {
+        if (u.getPlayer() == player && u.getType().isWorker()) {
+            Unit currentTarget = null;
+            Unit currentBase = null;
+            
+            // Find nearest resource
+            for (Unit resource : units) {
+                if (resource.getType().isResource() && game.getDistance(u, resource) < game.getDistance(u, currentTarget)) {
+                    currentTarget = resource;
+                }
+            }
+            
+            // Find nearest base
+            for (Unit base : units) {
+                if (base.getType().isBase() && game.getDistance(u, base) < game.getDistance(u, currentBase)) {
+                    currentBase = base;
+                }
+            }
+            
+            if (currentTarget != null && currentBase != null) {
+                Harvest harvestAction = new Harvest();
+                harvestAction.target = currentTarget;
+                harvestAction.base = currentBase;
+                harvestAction.pf = pf;
+                
+                UnitAction ua = harvestAction.execute(game, new ResourceUsage());
+                if (ua != null && !ua.getType().equals(UnitAction.TYPE_NONE)) {
+                    pa.addUnitAction(u, ua);
+                }
+            }
+        }
+    }
+    
+    return pa;
+}
+
+Compilation error:
+src/tests/HarvestActionTest.java:27: error: cannot find symbol
+        if (u.getPlayer() == player && u.getType().isWorker()) {
+                                                  ^
+  symbol:   method isWorker()
+  location: class UnitType
+src/tests/HarvestActionTest.java:33: error: cannot find symbol
+                if (resource.getType().isResource() && game.getDistance(u, resource) < game.getDistance(u, currentTarget)) {
+                                      ^
+  symbol:   method isResource()
+  location: class UnitType
+src/tests/HarvestActionTest.java:33: error: cannot find symbol
+                if (resource.getType().isResource() && game.getDistance(u, resource) < game.getDistance(u, currentTarget)) {
+                                                           ^
+  symbol:   method getDistance(Unit,Unit)
+  location: variable game of type GameState
+src/tests/HarvestActionTest.java:33: error: cannot find symbol
+                if (resource.getType().isResource() && game.getDistance(u, resource) < game.getDistance(u, currentTarget)) {
+                                                                                           ^
+  symbol:   method getDistance(Unit,Unit)
+  location: variable game of type GameState
+src/tests/HarvestActionTest.java:40: error: cannot find symbol
+                if (base.getType().isBase() && game.getDistance(u, base) < game.getDistance(u, currentBase)) {
+                                  ^
+  symbol:   method isBase()
+  location: class UnitType
+src/tests/HarvestActionTest.java:40: error: cannot find symbol
+                if (base.getType().isBase() && game.getDistance(u, base) < game.getDistance(u, currentBase)) {
+                                                   ^
+  symbol:   method getDistance(Unit,Unit)
+  location: variable game of type GameState
+src/tests/HarvestActionTest.java:40: error: cannot find symbol
+                if (base.getType().isBase() && game.getDistance(u, base) < game.getDistance(u, currentBase)) {
+                                                                               ^
+  symbol:   method getDistance(Unit,Unit)
+  location: variable game of type GameState
+src/tests/HarvestActionTest.java:46: error: constructor Harvest in class Harvest cannot be applied to given types;
+                Harvest harvestAction = new Harvest();
+                                        ^
+  required: Unit,Unit,Unit,PathFinding
+  found:    no arguments
+  reason: actual and formal argument lists differ in length
+src/tests/HarvestActionTest.java:47: error: target is not public in Harvest; cannot be accessed from outside package
+                harvestAction.target = currentTarget;
+                             ^
+src/tests/HarvestActionTest.java:48: error: base is not public in Harvest; cannot be accessed from outside package
+                harvestAction.base = currentBase;
+                             ^
+src/tests/HarvestActionTest.java:49: error: pf is not public in Harvest; cannot be accessed from outside package
+                harvestAction.pf = pf;
+                             ^
+src/tests/HarvestActionTest.java:52: error: int cannot be dereferenced
+                if (ua != null && !ua.getType().equals(UnitAction.TYPE_NONE)) {
+                                               ^
+12 errors
