@@ -22,6 +22,9 @@ Below classes are available to be used to construct Harvest_Resources function:
 ai.abstraction.AbstractAction; - This is an abstract class which is inherited by all the actions like Attack, Build, Harvest, Idle, Move, etc.
 public abstract class AbstractAction {
     Unit unit;
+    public AbstractAction(Unit a_unit) {} - Constructor
+    public Unit getUnit() {} - Getter for Unit
+    public void setUnit(Unit u) {} - Setter for Unit
     public abstract boolean completed(GameState pgs);
     public UnitAction execute(GameState pgs){}
     public abstract UnitAction execute(GameState pgs, ResourceUsage ru);
@@ -32,6 +35,9 @@ public class Harvest extends AbstractAction  {
     Unit target;
     Unit base;
     PathFinding pf;
+    public Harvest(Unit u, Unit a_target, Unit a_base, PathFinding a_pf) {} - Constructor
+    public Unit getTarget() {} - Getter for target
+    public Unit getBase() {} - Getter for base
     public boolean completed(GameState gs) { } - Returns true if the units don’t have the base, given that the unit has resources. If it doesn’t have resources, then it will return true if the units don’t have the target.
     public UnitAction execute(GameState gs, ResourceUsage ru) {} - Returns a UnitAction of TYPE_HARVEST with a direction (DIRECTION_UP, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_RIGHT) if it can find a path to any adjacent viable position. The direction is determined by the x and y coordinates of the base and target units.
 }
@@ -91,6 +97,60 @@ public class GameState {
        public int [][][] getVectorObservation(final int player){} - Constructs a vector observation for a player
 }
 
+rts.PhysicalGameState; - This class represents the physical game state (the actual 'map') of a microRTS game
+public class PhysicalGameState {
+    public static final int TERRAIN_NONE = 0; - Indicates a free tile
+    public static final int TERRAIN_WALL = 1; - Indicates a blocked tile
+
+    int width = 8;
+    int height = 8;
+    int terrain[];
+    List<Player> players = new ArrayList<>();
+    List<Unit> units = new LinkedList<>();
+    public static PhysicalGameState load(String fileName, UnitTypeTable utt) throws Exception {} - Constructs the game state map from a XML
+    public PhysicalGameState(int a_width, int a_height) {} - Creates a new game state map with the informed width and height. Initializes an empty terrain.
+    PhysicalGameState(int a_width, int a_height, int t[]) {} - Creates a new game state map with the informed width and height. Initializes with the received terrain.
+    public int getWidth() {}
+    public int getHeight() {}
+    public void setWidth(int w) {} - Sets a new width. This do not change the terrain array, remember to change that when you change the map width or height
+    public void setHeight(int h) {} - Sets a new height. This do not change the terrain array, remember to change that when you change the map width or height
+    public int getTerrain(int x, int y) {} - Returns what is on a given position of the terrain
+    public void setTerrain(int x, int y, int v) {} - Puts an entity in a given position of the terrain
+    public void setTerrain(int t[]) {} - Sets the whole terrain
+    public void addPlayer(Player p) {} - Adds a player
+    public void addUnit(Unit newUnit) throws IllegalArgumentException {} - Adds a new Unit to the map if its position is free. Throws IllegalArgumentException if the new unit's position is already occupied
+    public void removeUnit(Unit u) {} - Removes a unit from the map
+    public List<Unit> getUnits() {} - Returns the list of units in the map
+    public List<Player> getPlayers() {} - Returns a list of players
+    public Player getPlayer(int pID) {} - Returns a player given its ID
+    public Unit getUnit(long ID) {} - Returns a Unit given its ID or null if not found
+    public Unit getUnitAt(int x, int y) {} - Returns the Unit at a given coordinate or null if no unit is present
+    public Collection<Unit> getUnitsAround(int x, int y, int squareRange) {} - Returns the units within a squared area centered in the given coordinates
+    public Collection<Unit> getUnitsAround(int x, int y, int width, int height) {} - Returns units within a rectangular area centered in the given coordinates
+    public Collection<Unit> getUnitsInRectangle(int x, int y, int width, int height) {} - Returns units within a rectangle with the given top-left vertex and dimensions. Tests for x <= unitX < x+width && y <= unitY < y+height. Notice that the test is inclusive in top and left but exclusive on bottom and right
+    public int winner() {} - Returns the winner of the game, given the unit counts or -1 if the game is not over
+    boolean gameover() {} - Returns whether the game is over. The game is over when a player has zero units
+
+    public PhysicalGameState clone() {}
+    public PhysicalGameState cloneKeepingUnits() {} - Clone the physical game state, but does not clone the units The terrain is shared amongst all instances, since it never changes
+    public PhysicalGameState cloneIncludingTerrain() {} - Clones the physical game state, including its terrain    
+    public String toString() {}
+    public boolean equivalents(PhysicalGameState pgs) {} - This function tests if two PhysicalGameStates are identical
+    public boolean equivalentsIncludingTerrain(PhysicalGameState pgs) {} - This function tests if two PhysicalGameStates are identical, including their terrain
+    public boolean[][] getAllFree() {} - Returns an array with true if the given position has
+     PhysicalGameState.TERRAIN_NONE
+    private String compressTerrain() {} - Create a compressed String representation of the terrain vector. The terrain vector is an array of Integers, whose elements only assume 0 and 1 as possible values. This method compresses the terrain vector by counting the number of consecutive occurrences of a value and appending this to a String. Since 0 and 1 may appear in the counter, 0 is replaced by A and 1 is replaced by B. For example, the String 00000011110000000000 is transformed into A6B4A10. This method is useful when the terrain composes part of a message, to be shared between client and server.
+    private static int[] uncompressTerrain(String t) {} - Create an uncompressed int array from a compressed String representation of the terrain
+    public void toxml(XMLWriter w) {} - Writes a XML representation of the map
+    public void toxml(XMLWriter w, boolean includeConstants, boolean compressTerrain) {}
+    public void toJSON(Writer w) throws Exception {} - Writes a JSON representation of this map
+    public void toJSON(Writer w, boolean includeConstants, boolean compressTerrain) throws Exception {}
+    public static PhysicalGameState fromXML(Element e, UnitTypeTable utt) throws Exception {} - Constructs a map from XM
+    public static PhysicalGameState fromJSON(JsonObject o, UnitTypeTable utt) {} - Constructs a map from JSON
+    private static int[] getTerrainFromUnknownString(String terrainString, int size) {} - Transforms a compressed or uncompressed String representation of the terrain into an integer array
+    public void resetAllUnitsHP() {} - Reset all units HP to their base value
+}
+
 rts.PlayerAction; - This class stores a collection of pairs of (Unit, UnitAction)
 public class PlayerAction {
     List<Pair<Unit,UnitAction>> actions = new LinkedList<>();
@@ -108,12 +168,12 @@ public class PlayerAction {
     public PlayerAction merge(PlayerAction a) {} - Merges this with another PlayerAction
     public List<Pair<Unit,UnitAction>> getActions() {} - Returns a list of pairs of units and UnitActions
     public UnitAction getAction(Unit u) {} - Searches for the unit in the collection and returns the respective UnitAction
-       public List<PlayerAction> cartesianProduct(List<UnitAction> lu, Unit u, GameState s) {}
+    public List<PlayerAction> cartesianProduct(List<UnitAction> lu, Unit u, GameState s) {}
     public boolean consistentWith(ResourceUsage u, GameState gs) {} - Returns whether this PlayerAction is consistent with a given ResourceUsage and a GameState
     public void fillWithNones(GameState s, int pID, int duration) {} - Assign "none" to all the units that need an action and do not have one for the specified duration
     public boolean integrityCheck() {} - Returns true if this object passes the integrity check. It fails if the unit is being assigned an action from a player that does not owns it
     public void clear() {} - Resets the PlayerAction
-       public static PlayerAction fromVectorAction(int[][] actions, GameState gs, UnitTypeTable utt, int currentPlayer, int maxAttackRadius) {} - Creates a full assignment of actions to inactive units for a given player from a vector-based action representation. actions is a vector representation of actions. Outer dimension is for the list of actions/units, i.e. actions[i] gives us the vector representation for the i^th unit that we are assigning an action to. currentPlayer is the Player whom we are processing actions for. maxAttackRadius should be 2*a + 1, where a is the maximum attack range over all units.
+    public static PlayerAction fromVectorAction(int[][] actions, GameState gs, UnitTypeTable utt, int currentPlayer, int maxAttackRadius) {} - Creates a full assignment of actions to inactive units for a given player from a vector-based action representation. actions is a vector representation of actions. Outer dimension is for the list of actions/units, i.e. actions[i] gives us the vector representation for the i^th unit that we are assigning an action to. currentPlayer is the Player whom we are processing actions for. maxAttackRadius should be 2*a + 1, where a is the maximum attack range over all units.
 }
 
 rts.ResourceUsage; - This class tracks the resources being used
@@ -126,6 +186,7 @@ public class ResourceUsage {
     public int getResourcesUsed(int player) {} - Returns the amount of resources used by the player
     public ResourceUsage mergeIntoNew(ResourceUsage other) {} - Merges this and another instance of ResourceUsage into a new one
     public void merge(ResourceUsage other) {} - Merges another instance of ResourceUsage into this one
+    public ResourceUsage clone() {}
 }
 
 rts.UnitAction; - This class represents all kinds of actions that a unit can take
